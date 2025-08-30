@@ -1,71 +1,162 @@
 
+// import React from 'react';
+// import assets from '../../assets/assets'; // assuming cross_icon is inside
+// import { useAppContext } from '../../context/AppContext';
+// import { toast } from 'react-hot-toast';
+
+
+
+
+
+// const BlogTableItem = ({ blog, fetchBlogs, index }) => {
+//   const { title, createdAt, isPublished } = blog;
+//   const BlogDate = new Date(createdAt);
+//   const {axios}=useAppContext();
+
+//   const deleteBlog=async()=>{
+//     const confirm=window.confirm("Are you sure you want to delete this blog?");
+//     if(!confirm) return;
+//     try{
+//       const {data}=await axios.post(`/api/blogs/delete`,{id:blog._id});
+//       if(data.success){
+//         toast.success(data.message);
+//         await fetchBlogs();
+//       }
+//       else{
+//         toast.error(data.message);
+//       }
+//     }
+//     catch(error){
+//       toast.error(error.message);
+//     }
+//   }
+
+//   const togglePublish=async()=>{
+//     try{
+//       const {data}=await axios.post(`/api/blogs/toggle-publish`,{id:blog._id});
+//       if(data.success){
+//         toast.success(data.message);
+//         await fetchBlogs();
+//       }
+//       else{
+//         toast.error(data.message);
+//       }
+//     }
+//     catch(error){
+//       toast.error(error.message);
+//     }
+//   }
+
+//   return (
+//     <tr className='border-y border-gray-200'>
+//       <th className='px-2 py-4'>{index}</th>
+//       <td className='px-2 py-4'>{title}</td>
+//       <td className='px-2 py-4 max-sm:hidden'>{BlogDate.toDateString()}</td>
+//       <td className='px-2 py-4 max-sm:hidden'>
+//         <p className={isPublished ? "text-green-800" : "text-red-800"}>
+//           {isPublished ? 'Published' : 'Unpublished'}
+//         </p>
+//       </td>
+//       <td className='px-2 py-4 flex text-xs gap-3'>
+//         <button onClick={togglePublish} className='border px-2 py-0.5 rounded cursor-pointer'>
+//           {isPublished ? 'Unpublish' : 'Publish'}
+//         </button>
+//         <img
+//           src={assets.cross_icon}
+//           alt='Delete'
+//           onClick={deleteBlog}
+//           className='w-8 hover:scale-110 transition-all cursor-pointer'
+//         />
+//       </td>
+//     </tr>
+//   );
+// };
+
+// export default BlogTableItem;
+
 import React from 'react';
-import assets from '../../assets/assets'; // assuming cross_icon is inside
+import assets from '../../assets/assets';
 import { useAppContext } from '../../context/AppContext';
 import { toast } from 'react-hot-toast';
-
-
-
-
 
 const BlogTableItem = ({ blog, fetchBlogs, index }) => {
   const { title, createdAt, isPublished } = blog;
   const BlogDate = new Date(createdAt);
-  const {axios}=useAppContext();
 
-  const deleteBlog=async()=>{
-    const confirm=window.confirm("Are you sure you want to delete this blog?");
-    if(!confirm) return;
-    try{
-      const {data}=await axios.post(`/api/blogs/delete`,{id:blog._id});
-      if(data.success){
+  // yaha se axios aur token dono le lo
+  const { axios, token } = useAppContext();
+
+  const deleteBlog = async () => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this blog?");
+    if (!confirmDelete) return;
+
+    try {
+      const { data } = await axios.post(
+        `/api/blogs/delete`,
+        { id: blog._id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 👈 yaha token add kiya
+          },
+        }
+      );
+
+      if (data.success) {
         toast.success(data.message);
         await fetchBlogs();
-      }
-      else{
+      } else {
         toast.error(data.message);
       }
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
     }
-    catch(error){
-      toast.error(error.message);
-    }
-  }
+  };
 
-  const togglePublish=async()=>{
-    try{
-      const {data}=await axios.post(`/api/blogs/toggle-publish`,{id:blog._id});
-      if(data.success){
+  const togglePublish = async () => {
+    try {
+      const { data } = await axios.post(
+        `/api/blogs/toggle-publish`,
+        { id: blog._id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 👈 yaha bhi token add kiya
+          },
+        }
+      );
+
+      if (data.success) {
         toast.success(data.message);
         await fetchBlogs();
-      }
-      else{
+      } else {
         toast.error(data.message);
       }
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
     }
-    catch(error){
-      toast.error(error.message);
-    }
-  }
+  };
 
   return (
-    <tr className='border-y border-gray-200'>
-      <th className='px-2 py-4'>{index}</th>
-      <td className='px-2 py-4'>{title}</td>
-      <td className='px-2 py-4 max-sm:hidden'>{BlogDate.toDateString()}</td>
-      <td className='px-2 py-4 max-sm:hidden'>
+    <tr className="border-y border-gray-200">
+      <th className="px-2 py-4">{index}</th>
+      <td className="px-2 py-4">{title}</td>
+      <td className="px-2 py-4 max-sm:hidden">{BlogDate.toDateString()}</td>
+      <td className="px-2 py-4 max-sm:hidden">
         <p className={isPublished ? "text-green-800" : "text-red-800"}>
           {isPublished ? 'Published' : 'Unpublished'}
         </p>
       </td>
-      <td className='px-2 py-4 flex text-xs gap-3'>
-        <button onClick={togglePublish} className='border px-2 py-0.5 rounded cursor-pointer'>
+      <td className="px-2 py-4 flex text-xs gap-3">
+        <button
+          onClick={togglePublish}
+          className="border px-2 py-0.5 rounded cursor-pointer"
+        >
           {isPublished ? 'Unpublish' : 'Publish'}
         </button>
         <img
           src={assets.cross_icon}
-          alt='Delete'
+          alt="Delete"
           onClick={deleteBlog}
-          className='w-8 hover:scale-110 transition-all cursor-pointer'
+          className="w-8 hover:scale-110 transition-all cursor-pointer"
         />
       </td>
     </tr>

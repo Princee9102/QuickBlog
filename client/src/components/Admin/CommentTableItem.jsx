@@ -13,7 +13,7 @@ const CommentTableItem = ({comment,fetchComments}) => {
 
     const approveComment = async () => {
   try {
-    const { data } = await axios.put(`/api/admin/comments/${_id}/approve`);
+    const { data } = await axios.post(`/api/admin/comments/${_id}/approve`);
     if (data.success) {
       toast.success(data.message);
       fetchComments();

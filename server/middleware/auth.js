@@ -32,7 +32,7 @@ const auth = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
-    return res.status(401).json({ success: false, message: "No token provided" });
+    return res.json({ success: false, message: "No token provided" });
   }
 
   // Format: "Bearer <token>"
@@ -46,7 +46,7 @@ const auth = (req, res, next) => {
     next();
   } catch (error) {
     console.log("JWT Error:", error.message);
-    return res.status(401).json({
+    return res.json({
       success: false,
       message: "Invalid token",
     });

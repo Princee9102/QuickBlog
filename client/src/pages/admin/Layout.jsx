@@ -9,11 +9,13 @@ const Layout = () => {
     
     const {axios,setToken,navigate}=useAppContext();
 
-const logout =()=>{
+    const logout = () => {
   localStorage.removeItem("token");
-  axios.defaults.headers.common['Authorization'] = '';
-  navigate('/')
-}
+  setToken(null);   // context state bhi reset
+  delete axios.defaults.headers.common['Authorization'];
+  navigate('/');
+};
+
   return (
     <>
       <div className='flex item-center justify-between py-2 h-[70px] px-4 sm:px-12 border-b border-gray-200'>

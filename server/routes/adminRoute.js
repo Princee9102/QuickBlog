@@ -49,7 +49,7 @@ adminRoute.get('/blogs', auth, getAllBlogsAdmin);
 // adminRoute.post('/comments/:id', auth, deleteCommentById);
 // adminRoute.post('/comments/:id/approve', auth, approveCommentById);
 adminRoute.delete('/comments/:id', auth, deleteCommentById);
-adminRoute.put('/comments/:id/approve', auth, approveCommentById);
+adminRoute.post('/comments/:id/approve', auth, approveCommentById);
 
 
 adminRoute.get('/dashboard', auth, getDashboard);

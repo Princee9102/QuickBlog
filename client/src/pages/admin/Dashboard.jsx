@@ -17,17 +17,60 @@ const Dashboard = () => {
 
   const {axios}=useAppContext();
 
+const fetchDashboardData = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    console.log("Using token:", token);
 
-  const fetchDashboardData = async () => {
-     // simulate API call
-     try{
-      const {data}=await axios.get('/api/admin/dashboard');
-      data.success? setDashboardData(data.dashboardData):toast.error(data.message);
-     }catch(error){
+    const { data } = await axios.get("/api/admin/dashboard", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    // const { data } = await axios.get("/api/admin/dashboard");
+
+
+    console.log("Dashboard API response:", data);
+
+    data.success
+      ? setDashboardData(data.dashboardData)
+      : toast.error(data.message);
+  } catch (error) {
+    
+    toast.error(error.response?.data?.message || error.message);
+  }
+};
+
+
+
+
+//   const fetchDashboardData = async () => {
+//   try {
+//     const token = localStorage.getItem("token"); // login ke baad yahi save hota hai
+//     const { data } = await axios.get("/api/admin/dashboard", {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//     });
+//     data.success
+//       ? setDashboardData(data.dashboardData)
+//       : toast.error(data.message);
+//   } catch (error) {
+//     toast.error(error.response?.data?.message || error.message);
+//   }
+// };
+
+  // const fetchDashboardData = async () => {
+  //    // simulate API call
+  //    try{
+      
+  //     const {data}=await axios.get('/api/admin/dashboard');
+  //     data.success? setDashboardData(data.dashboardData):toast.error(data.message);
+  //    }catch(error){
        
-      toast.error(error.message);
-     }
-  };
+  //     toast.error(error.message);
+  //    }
+  // };
 
   useEffect(() => {
     fetchDashboardData();
