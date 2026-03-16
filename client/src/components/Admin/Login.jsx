@@ -150,6 +150,11 @@ const Login = () => {
         setToken(data.token);
         localStorage.setItem("token", data.token);
         axios.defaults.headers.common["Authorization"] =data.token;
+       
+
+      
+      const token = authHeader.split(" ")[1]; // "Bearer <token>" assume kiya hua hai
+
 
         toast.success("Login successful!");
        
